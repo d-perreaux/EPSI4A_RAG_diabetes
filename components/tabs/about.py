@@ -5,7 +5,7 @@ from datetime import datetime
 
 def about():
     st.title("📚 Local RAG")
-    st.caption(f"Developed by Jon Fairbanks &copy; {datetime.now().year}")
+    st.caption(f"Forked from Jon Fairbanks &copy; {datetime.now().year}")
     st.write("")
 
     links_html = """
@@ -34,20 +34,20 @@ def about():
     </ul>
     """
 
-    help_html = """
-    <ul style="list-style-type:none; padding-left:0;">
-        <li>
-            <a href="https://github.com/jonfairbanks/local-rag/issues" style="color: grey;">
-                Bug Reports
-            </a>
-        </li>
-        <li>
-            <a href="https://github.com/jonfairbanks/local-rag/discussions/new?category=ideas" style="color: grey;">
-                Feature Requests
-            </a>
-        </li>
-    </ul>
-    """
+    # help_html = """
+    # <ul style="list-style-type:none; padding-left:0;">
+    #     <li>
+    #         <a href="https://github.com/jonfairbanks/local-rag/issues" style="color: grey;">
+    #             Bug Reports
+    #         </a>
+    #     </li>
+    #     <li>
+    #         <a href="https://github.com/jonfairbanks/local-rag/discussions/new?category=ideas" style="color: grey;">
+    #             Feature Requests
+    #         </a>
+    #     </li>
+    # </ul>
+    # """
 
     st.subheader("Links")
     st.markdown(links_html, unsafe_allow_html=True)
@@ -55,5 +55,5 @@ def about():
     st.subheader("Resources")
     st.markdown(resources_html, unsafe_allow_html=True)
 
-    st.subheader("Help")
-    st.markdown(help_html, unsafe_allow_html=True)
+    # st.subheader("Help")
+    # st.markdown(help_html, unsafe_allow_html=True)

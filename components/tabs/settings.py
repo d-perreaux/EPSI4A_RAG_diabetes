@@ -17,7 +17,7 @@ def settings():
         st.text_input(
             "Ollama Endpoint",
             key="ollama_endpoint",
-            placeholder="http://localhost:11434",
+            placeholder="http://host.docker.internal:11434",
             on_change=ollama.get_models,
         )
         st.selectbox(

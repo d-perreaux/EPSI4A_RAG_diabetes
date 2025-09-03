@@ -15,7 +15,7 @@ def set_initial_state():
         st.session_state["sidebar_state"] = "expanded"
 
     if "ollama_endpoint" not in st.session_state:
-        st.session_state["ollama_endpoint"] = "http://localhost:11434"
+        st.session_state["ollama_endpoint"] = "http://host.docker.internal:11434"
 
     if "embedding_model" not in st.session_state:
         st.session_state["embedding_model"] = "Default (bge-large-en-v1.5)"
@@ -50,7 +50,7 @@ def set_initial_state():
         st.session_state["messages"] = [
             {
                 "role": "assistant",
-                "content": "Welcome to Local RAG! To begin, please either import some files or ingest a GitHub repo. Once you've completed those steps, we can continue the conversation and explore how I can assist you further.",
+                "content": "Welcome to Local RAG! To begin, please import some files. Once you've completed those steps, we can continue the conversation and explore how I can assist you further.",
             }
         ]
 
@@ -91,9 +91,15 @@ def set_initial_state():
         st.session_state["advanced"] = False
 
     if "system_prompt" not in st.session_state:
-        st.session_state["system_prompt"] = (
-            "You are a sophisticated virtual assistant designed to assist users in comprehensively understanding and extracting insights from a wide range of documents at their disposal. Your expertise lies in tackling complex inquiries and providing insightful analyses based on the information contained within these documents."
-        )
+        st.session_state["system_prompt"] = ("""
+            Tu es un assistant nutritionnel spécialisé dans l'alimentation pour les personnes diabétiques.
+            Ton objectif est de fournir des conseils clairs, bienveillants et pratiques en te basant uniquement sur les informations contenues dans le contexte suivant. Ne jamais inventer d'informations.
+
+            En te basant sur le contexte, réponds à la question suivante
+            Si le contexte ne contient pas la réponse, réponds honnêtement que tu n'as pas l'information dans les documents fournis.
+
+            Important : Termine toujours ta réponse par un avertissement rappelant à l'utilisateur de consulter un professionnel de santé (médecin, diabétologue, nutritionniste) avant de faire des changements importants à son régime alimentaire.
+        """)
 
     if "top_k" not in st.session_state:
         st.session_state["top_k"] = 3
