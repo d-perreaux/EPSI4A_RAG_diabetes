@@ -187,10 +187,45 @@ def context_chat(prompt: str, query_engine: RetrieverQueryEngine):
     """
 
     try:
-        stream = query_engine.query(prompt)
-        for text in stream.response_gen:
-            # print(str(text), end="", flush=True)
-            yield str(text)
+        streaming_response = query_engine.query(prompt)
+        response_generator = streaming_response.response_gen
+        initial_buffer = ""
+        is_thought_processed = False
+
+        for text_chunk in response_generator:
+            if not is_thought_processed:
+                initial_buffer += text_chunk
+                end_tag = "</think>"
+                end_tag_pos = initial_buffer.find(end_tag)
+                if end_tag_pos != -1:
+                    # On récupère le vrai début de la réponse (ce qui est APRÈS la balise)
+                    true_response_start = initial_buffer[end_tag_pos + len(end_tag):]
+                    
+                    # On envoie ce premier morceau de la vraie réponse
+                    yield true_response_start
+                    
+                    # On marque le traitement comme terminé
+                    is_thought_processed = True
+            else:
+                # Une fois le bloc <think> passé, on streame normalement
+                yield text_chunk
+
+        # Après la génération de la réponse, on gère l'affichage des sources
+        source_nodes = streaming_response.source_nodes
+        
+        if source_nodes:
+            unique_sources = set()
+            for node in source_nodes:
+                if 'file_name' in node.node.metadata:
+                    unique_sources.add(node.node.metadata['file_name'])
+
+            if unique_sources:
+                sources_text = "\n\n---\n**Sources utilisées :**\n"
+                for source in sorted(list(unique_sources)):
+                    sources_text += f"- `{source}`\n"
+                
+                yield sources_text
+
     except Exception as err:
         logs.log.error(f"Ollama chat stream error: {err}")
         return
